@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<script src="~/js/socket.io.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+
+<h3>Clock</h3>
+<div id="clock"></div>
+<h3>CPU</h3>
+<div id="cpu"></div>
+<h3>Memory</h3>
+<div id="memory"></div>
+<h3>Disk</h3>
+<div id="disk"></div>
+
+<script>
+
+    $(document).ready(function () {
+
+  
+
+    var socket = io.connect('http://localhost:3000');
+    socket.on('connect', function (data) {
+
+
+      //  socket.emit('sendMsg', 'Hello world from client c#1');
+
+    });
+
+
+    socket.on('sendMsg', function (data) {
+       // $('#clock').html(data);
+
+        $('#chatboard').append(data + "\r\n"); // เอาค่าที่ได้มาใส่ใน textarea
+
+    });
+
+   // socket.emit('fromProcess', 'Hello world from client c#1');
+
+    /* socket.on('receive', function (data) {
+         $('#clock').html(data);
+     });*/
+
+
+    //socket.emit('fromProcess', 'Hello world from client c#1');
+
+
+    
+    $('#button').click(function () { // มีผลเหมือนกับฟังชั่น keypress เพียงแต่เป็นการคลิ๊กปุ่ม
+        var message = $('#messagebox').val();
+        $('#messagebox').val("");
+       // socket.emit('sendMsg', { message: message });
+        socket.emit('sendMsg', { message: message });
+
+      
+    });
+
+
+    });
+
+
+</script>
+
+
+
+<div class="chat-room">
+    <table>
+        <tr>
+            <td colspan="2">
+                <textarea id="chatboard" readonly="readonly" rows='10' cols='50' style='resize:none;'>
+                            
+                        </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type='text' id='messagebox' maxlength="100" style='width:100%;' />
+            </td>
+            <td>
+                <input type='button' id="button" value='Send' />
+            </td>
+        </tr>
+    </table>
+</div>
